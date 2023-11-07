@@ -20,64 +20,26 @@ class _AdminPageState extends State<AdminPage> {
             return CircularProgressIndicator();
           }
           var users = snapshot.data!.docs;
-          List<Widget> userWidgets = [];
-          for (var user in users) {
-            var userData = user.data() as Map<String, dynamic>;
-            userWidgets.add(Card(
-              margin: EdgeInsets.all(8.0),
-              child: ListTile(
-                title: Text('Email: ${userData['Email']}'),
-                subtitle: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text('Full Name: ${userData['FullName']}'),
-                    Text('School: ${userData['School']}'),
-                    Text('Specialization: ${userData['Specialization']}'),
-                    Text('Level: ${userData['Level']}'),
-                  ],
-                ),
-                trailing: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    IconButton(
-                      icon: Icon(Icons.edit),
-                      onPressed: () {
-                        // Display a dialog to edit user information
-                        showEditDialog(userData);
-                      },
-                    ),
-                    IconButton(
-                      icon: Icon(Icons.delete),
-                      onPressed: () {
-                        // Implement delete functionality for this user
-                        FirebaseFirestore.instance
-                            .collection('users')
-                            .doc(user.id)
-                            .delete()
-                            .then((value) {
-                          // Deletion successful
-                          print('User deleted');
-                        }).catchError((error) {
-                          // Handle any errors that occur during deletion
-                          print('Error: $error');
-                        });
-                      },
-                    ),
-                  ],
-                ),
-              ),
-            ));
-          }
           return ListView(
-            children: userWidgets,
+            children: users.map((user) {
+              var userData = user.data() as Map<String, dynamic>;
+              return UserCard(
+                  userData: userData,
+                  onDelete: () {
+                    deleteUserData(user.id);
+                  },
+                  onEdit: () {
+                    showEditDialog(userData, user.id);
+                  });
+            }).toList(),
           );
         },
       ),
     );
   }
 
-  // Function to display an edit dialog for user information
-  Future<void> showEditDialog(Map<String, dynamic> userData) async {
+  Future<void> showEditDialog(
+      Map<String, dynamic> userData, String userId) async {
     return showDialog(
       context: context,
       builder: (context) {
@@ -132,8 +94,7 @@ class _AdminPageState extends State<AdminPage> {
             ),
             TextButton(
               onPressed: () {
-                // Implement update functionality here
-                updateUserData(userData);
+                updateUserData(userId, userData);
                 Navigator.of(context).pop();
               },
               child: Text('Update'),
@@ -144,12 +105,11 @@ class _AdminPageState extends State<AdminPage> {
     );
   }
 
-  // Function to update user information
-  void updateUserData(Map<String, dynamic> userData) {
+  void updateUserData(String userId, Map<String, dynamic> userData) {
     FirebaseFirestore.instance
         .collection('users')
-        .doc(userData['Email'])
-        .set(userData)
+        .doc(userId)
+        .update(userData)
         .then((value) {
       // Data updated successfully
       print('User data updated');
@@ -157,5 +117,63 @@ class _AdminPageState extends State<AdminPage> {
       // Handle any errors that occur during the update
       print('Error: $error');
     });
+  }
+
+  void deleteUserData(String userId) {
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(userId)
+        .delete()
+        .then((value) {
+      // Deletion successful
+      print('User deleted');
+    }).catchError((error) {
+      // Handle any errors that occur during deletion
+      print('Error: $error');
+    });
+  }
+}
+
+class UserCard extends StatelessWidget {
+  final Map<String, dynamic> userData;
+  final VoidCallback onDelete;
+  final VoidCallback onEdit;
+
+  UserCard({
+    required this.userData,
+    required this.onDelete,
+    required this.onEdit,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      margin: EdgeInsets.all(8.0),
+      child: ListTile(
+        title: Text('Email: ${userData['Email']}'),
+        subtitle: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Text('Full Name: ${userData['FullName']}'),
+            Text('School: ${userData['School']}'),
+            Text('Specialization: ${userData['Specialization']}'),
+            Text('Level: ${userData['Level']}'),
+          ],
+        ),
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            IconButton(
+              icon: Icon(Icons.edit),
+              onPressed: onEdit,
+            ),
+            IconButton(
+              icon: Icon(Icons.delete),
+              onPressed: onDelete,
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }
