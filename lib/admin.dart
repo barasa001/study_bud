@@ -42,13 +42,8 @@ class _AdminPageState extends State<AdminPage> {
                     IconButton(
                       icon: Icon(Icons.edit),
                       onPressed: () {
-                        // Navigate to an update page with userData for editing
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => UpdatePage(userData),
-                          ),
-                        );
+                        // Display a dialog to edit user information
+                        showEditDialog(userData);
                       },
                     ),
                     IconButton(
@@ -80,110 +75,87 @@ class _AdminPageState extends State<AdminPage> {
       ),
     );
   }
-}
 
-class UpdatePage extends StatefulWidget {
-  final Map<String, dynamic> userData;
-
-  UpdatePage(this.userData);
-
-  @override
-  _UpdatePageState createState() => _UpdatePageState();
-}
-
-class _UpdatePageState extends State<UpdatePage> {
-  // Controller variables for editing fields
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController fullNameController = TextEditingController();
-  final TextEditingController schoolController = TextEditingController();
-  final TextEditingController specializationController =
-      TextEditingController();
-  final TextEditingController levelController = TextEditingController();
-
-  @override
-  void initState() {
-    super.initState();
-    // Initialize controller values with the userData
-    emailController.text = widget.userData['Email'];
-    fullNameController.text = widget.userData['FullName'];
-    schoolController.text = widget.userData['School'];
-    specializationController.text = widget.userData['Specialization'];
-    levelController.text = widget.userData['Level'];
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Update User Data'),
-      ),
-      body: SingleChildScrollView(
-        child: Container(
-          padding: EdgeInsets.all(20.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
+  // Function to display an edit dialog for user information
+  Future<void> showEditDialog(Map<String, dynamic> userData) async {
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Edit User Information'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              Center(
-                child: Text(
-                  'Update User Data',
-                  style: TextStyle(
-                    fontSize: 24.0,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              SizedBox(height: 20.0),
               TextFormField(
-                controller: emailController,
+                initialValue: userData['Email'],
                 decoration: InputDecoration(labelText: 'Email'),
-              ),
-              TextFormField(
-                controller: fullNameController,
-                decoration: InputDecoration(labelText: 'Full Name'),
-              ),
-              TextFormField(
-                controller: schoolController,
-                decoration: InputDecoration(labelText: 'School'),
-              ),
-              TextFormField(
-                controller: specializationController,
-                decoration: InputDecoration(labelText: 'Specialization'),
-              ),
-              TextFormField(
-                controller: levelController,
-                decoration: InputDecoration(labelText: 'Level'),
-              ),
-              SizedBox(height: 20.0),
-              ElevatedButton(
-                onPressed: () {
-                  // Implement update functionality here
-                  FirebaseFirestore.instance
-                      .collection('users')
-                      .doc(widget.userData['Email'])
-                      .update({
-                    'Email': emailController.text,
-                    'FullName': fullNameController.text,
-                    'School': schoolController.text,
-                    'Specialization': specializationController.text,
-                    'Level': levelController.text,
-                  }).then((value) {
-                    // Data updated successfully
-                    Navigator.pop(context); // Go back to the admin page
-                  }).catchError((error) {
-                    // Handle any errors that occur during the update
-                    print('Error: $error');
-                  });
+                onChanged: (value) {
+                  userData['Email'] = value;
                 },
-                style: ElevatedButton.styleFrom(
-                  primary: Colors.green,
-                  onPrimary: Colors.white,
-                ),
-                child: Text('UPDATE'),
+              ),
+              TextFormField(
+                initialValue: userData['FullName'],
+                decoration: InputDecoration(labelText: 'Full Name'),
+                onChanged: (value) {
+                  userData['FullName'] = value;
+                },
+              ),
+              TextFormField(
+                initialValue: userData['School'],
+                decoration: InputDecoration(labelText: 'School'),
+                onChanged: (value) {
+                  userData['School'] = value;
+                },
+              ),
+              TextFormField(
+                initialValue: userData['Specialization'],
+                decoration: InputDecoration(labelText: 'Specialization'),
+                onChanged: (value) {
+                  userData['Specialization'] = value;
+                },
+              ),
+              TextFormField(
+                initialValue: userData['Level'],
+                decoration: InputDecoration(labelText: 'Level'),
+                onChanged: (value) {
+                  userData['Level'] = value;
+                },
               ),
             ],
           ),
-        ),
-      ),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                // Implement update functionality here
+                updateUserData(userData);
+                Navigator.of(context).pop();
+              },
+              child: Text('Update'),
+            ),
+          ],
+        );
+      },
     );
+  }
+
+  // Function to update user information
+  void updateUserData(Map<String, dynamic> userData) {
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(userData['Email'])
+        .set(userData)
+        .then((value) {
+      // Data updated successfully
+      print('User data updated');
+    }).catchError((error) {
+      // Handle any errors that occur during the update
+      print('Error: $error');
+    });
   }
 }

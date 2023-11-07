@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'signup.dart'; // Import your signup page
 
 void main() {
   runApp(MyApp());
@@ -135,7 +136,14 @@ class _LoginPageState extends State<LoginPage> {
             // Sign up text
             TextButton(
               onPressed: () {
-                // TODO: Implement sign up logic
+                // Navigate to the signup page
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        SignupPage(), // Assuming this is the name of your signup page class
+                  ),
+                );
               },
               child: Text('SIGNUP'),
               style: TextButton.styleFrom(
