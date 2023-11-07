@@ -19,6 +19,7 @@ Study Bud is committed to providing a safe and supportive environment for studen
 We believe that Study Bud can help students succeed in school and beyond. By providing students with a convenient and safe platform to connect with each other and collaborate on their studies, Study Bud can help students reach their full potential.
 
 **Link to prototype**: https://previewer.adalo.com/cdd69807-42a6-45da-8b4e-501dee6c0a09
+
 **Link to assignment 4 video**: https://www.youtube.com/watch?v=o3KT_weON3Q
 
 ## Authors :black_nib:
