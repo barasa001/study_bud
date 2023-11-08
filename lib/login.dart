@@ -1,18 +1,7 @@
 import 'package:flutter/material.dart';
-import 'signup.dart'; // Import your signup page
-
-void main() {
-  runApp(MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: LoginPage(),
-    );
-  }
-}
+import 'auth_service.dart'; // Import authentication service
+import 'homepagechat.dart'; // Import homepage chat page
+import 'signup.dart'; // Import signup page
 
 class LoginPage extends StatefulWidget {
   @override
@@ -21,12 +10,24 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
-
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
 
-  void _login() {
-    // TODO: Implement login logic
+  Future<void> _login(BuildContext context) async {
+    if (_formKey.currentState!.validate()) {
+      try {
+        await AuthService().signIn(
+          email: _emailController.text,
+          password: _passwordController.text,
+        );
+
+        // Successfully signed in, navigate to the homepage (homepagechat.dart)
+        Navigator.pushReplacementNamed(context, '/home');
+      } catch (e) {
+        // Handle any errors that occurred during login
+        print("Error: $e");
+      }
+    }
   }
 
   @override
@@ -37,7 +38,6 @@ class _LoginPageState extends State<LoginPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // Heading
             Text(
               'Login',
               style: TextStyle(
@@ -47,12 +47,10 @@ class _LoginPageState extends State<LoginPage> {
               ),
             ),
             SizedBox(height: 20),
-            // Email section
             Form(
               key: _formKey,
               child: Column(
                 children: [
-                  // Email text
                   Align(
                     alignment: Alignment.topLeft,
                     child: Text(
@@ -64,7 +62,6 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                   SizedBox(height: 10),
-                  // Email input field
                   TextFormField(
                     controller: _emailController,
                     decoration: InputDecoration(
@@ -80,7 +77,6 @@ class _LoginPageState extends State<LoginPage> {
                     },
                   ),
                   SizedBox(height: 20),
-                  // Password text
                   Align(
                     alignment: Alignment.topLeft,
                     child: Text(
@@ -92,7 +88,6 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                   SizedBox(height: 10),
-                  // Password input field
                   TextFormField(
                     controller: _passwordController,
                     decoration: InputDecoration(
@@ -112,9 +107,10 @@ class _LoginPageState extends State<LoginPage> {
               ),
             ),
             SizedBox(height: 20),
-            // Login button
             ElevatedButton(
-              onPressed: _login,
+              onPressed: () {
+                _login(context);
+              },
               child: Text('LOGIN'),
               style: ElevatedButton.styleFrom(
                 primary: Colors.green,
@@ -122,7 +118,6 @@ class _LoginPageState extends State<LoginPage> {
               ),
             ),
             SizedBox(height: 20),
-            // Forgot password text
             TextButton(
               onPressed: () {
                 // TODO: Implement forgot password logic
@@ -133,15 +128,13 @@ class _LoginPageState extends State<LoginPage> {
               ),
             ),
             SizedBox(height: 20),
-            // Sign up text
             TextButton(
               onPressed: () {
                 // Navigate to the signup page
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) =>
-                        SignupPage(), // Assuming this is the name of your signup page class
+                    builder: (context) => SignupPage(),
                   ),
                 );
               },

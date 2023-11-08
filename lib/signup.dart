@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'admin.dart'; // Import the admin.dart file
+import 'package:firebase_auth/firebase_auth.dart';
+
+import 'admin.dart';
 
 void main() {
   runApp(SignupApp());
@@ -23,6 +25,37 @@ class SignupPage extends StatelessWidget {
   final TextEditingController specializationController =
       TextEditingController();
   final TextEditingController levelController = TextEditingController();
+
+  Future<void> _signupWithEmailAndPassword(BuildContext context) async {
+    try {
+      UserCredential userCredential =
+          await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: emailController.text,
+        password: passwordController.text,
+      );
+
+      User? user = userCredential.user;
+
+      if (user != null) {
+        CollectionReference collRef =
+            FirebaseFirestore.instance.collection('users');
+        collRef.add({
+          'Email': emailController.text,
+          'FullName': fullNameController.text,
+          'School': schoolController.text,
+          'Specialization': specializationController.text,
+          'Level': levelController.text,
+        }).then((value) {
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => AdminPage()));
+        }).catchError((error) {
+          print("Error: $error");
+        });
+      }
+    } catch (e) {
+      print("Error: $e");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -64,31 +97,13 @@ class SignupPage extends StatelessWidget {
               SizedBox(height: 20.0),
               ElevatedButton(
                 onPressed: () {
-                  // Implement signup functionality here
-                  CollectionReference collRef =
-                      FirebaseFirestore.instance.collection('users');
-                  collRef.add({
-                    'Email': emailController.text,
-                    'Password': passwordController.text,
-                    'FullName': fullNameController.text,
-                    'School': schoolController.text,
-                    'Specialization': specializationController.text,
-                    'Level': levelController.text,
-                  }).then((value) {
-                    // Data added to Firestore successfully
-                    // You can add additional actions here, like navigating to AdminPage
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => AdminPage()));
-                  }).catchError((error) {
-                    // Handle any errors that occur during the process
-                    print("Error: $error");
-                  });
+                  _signupWithEmailAndPassword(context);
                 },
+                child: Text('SIGNUP'),
                 style: ElevatedButton.styleFrom(
                   primary: Colors.green,
                   onPrimary: Colors.white,
                 ),
-                child: Text('SIGNUP'),
               ),
             ],
           ),

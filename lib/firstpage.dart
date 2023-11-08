@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:study_bud/login.dart'; // Import your login.dart
-import 'package:study_bud/signup.dart'; // Import your signup.dart
+import 'package:study_bud/login.dart'; // Import login.dart
+import 'package:study_bud/signup.dart'; // Import signup.dart
 
 class StudyBudPage extends StatelessWidget {
   @override
