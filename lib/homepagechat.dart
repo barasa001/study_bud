@@ -34,7 +34,7 @@ class HomePageChat extends StatelessWidget {
               children: [
                 ListTile(
                   leading: CircleAvatar(
-                    // Placeholder avatar, replace with your own logic
+                    // Placeholder avatar
                     backgroundColor: Colors.grey,
                     child: Icon(Icons.person),
                   ),
@@ -56,7 +56,6 @@ class HomePageChat extends StatelessWidget {
                     // Open the chat with User 2
                   },
                 ),
-                // Add more chat entries as needed
               ],
             ),
           ),
