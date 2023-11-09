@@ -16,16 +16,37 @@ class _LoginPageState extends State<LoginPage> {
   Future<void> _login(BuildContext context) async {
     if (_formKey.currentState!.validate()) {
       try {
-        await AuthService().signIn(
+        final user = await AuthService().signIn(
           email: _emailController.text,
           password: _passwordController.text,
         );
 
-        // Successfully signed in, navigate to the homepage (homepagechat.dart)
-        Navigator.pushReplacementNamed(context, '/home');
+        if (user == null) {
+          // User doesn't exist or wrong credentials
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: Text('Login Failed'),
+                content: Text('User does not exist or wrong credentials.'),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: Text('OK'),
+                  ),
+                ],
+              );
+            },
+          );
+        } else {
+          // Successfully signed in, navigate to the homepage (homepagechat.dart)
+          Navigator.pushReplacementNamed(context, '/home');
+        }
       } catch (e) {
         // Handle any errors that occurred during login
-        print("Error: $e");
+        print('Error: $e');
       }
     }
   }

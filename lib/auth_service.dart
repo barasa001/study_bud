@@ -15,7 +15,7 @@ class AuthService {
       return userCredential.user;
     } catch (e) {
       print("Error: $e");
-      return null;
+      return null; // Return null in case of an unsuccessful login
     }
   }
 
