@@ -34,7 +34,9 @@ class HomePageChat extends StatelessWidget {
               children: [
                 ListTile(
                   leading: CircleAvatar(
-                    backgroundImage: AssetImage('assets/images/user1.jpg'),
+                    // Placeholder avatar, replace with your own logic
+                    backgroundColor: Colors.grey,
+                    child: Icon(Icons.person),
                   ),
                   title: Text('User 1'),
                   subtitle: Text('Last message from User 1'),
@@ -44,7 +46,9 @@ class HomePageChat extends StatelessWidget {
                 ),
                 ListTile(
                   leading: CircleAvatar(
-                    backgroundImage: AssetImage('assets/images/user2.jpg'),
+                    // Placeholder avatar
+                    backgroundColor: Colors.grey,
+                    child: Icon(Icons.person),
                   ),
                   title: Text('User 2'),
                   subtitle: Text('Last message from User 2'),
