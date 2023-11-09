@@ -17,7 +17,12 @@ class SignupApp extends StatelessWidget {
   }
 }
 
-class SignupPage extends StatelessWidget {
+class SignupPage extends StatefulWidget {
+  @override
+  _SignupPageState createState() => _SignupPageState();
+}
+
+class _SignupPageState extends State<SignupPage> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController fullNameController = TextEditingController();
@@ -25,6 +30,30 @@ class SignupPage extends StatelessWidget {
   final TextEditingController specializationController =
       TextEditingController();
   final TextEditingController levelController = TextEditingController();
+
+  String passwordStrength = '';
+
+  bool isLengthRequirementMet(String password) => password.length >= 8;
+  bool containsUpperCase(String password) =>
+      password.contains(RegExp(r'[A-Z]'));
+  bool containsLowerCase(String password) =>
+      password.contains(RegExp(r'[a-z]'));
+  bool containsDigit(String password) => password.contains(RegExp(r'[0-9]'));
+
+  void checkPasswordStrength(String password) {
+    if (isLengthRequirementMet(password) &&
+        containsUpperCase(password) &&
+        containsLowerCase(password) &&
+        containsDigit(password)) {
+      setState(() {
+        passwordStrength = 'Strong password';
+      });
+    } else {
+      setState(() {
+        passwordStrength = 'Weak password';
+      });
+    }
+  }
 
   Future<void> _signupWithEmailAndPassword(BuildContext context) async {
     try {
@@ -85,7 +114,16 @@ class SignupPage extends StatelessWidget {
               SignupField('Email', 'Enter email...',
                   controller: emailController),
               SignupField('Password', 'Enter password...',
-                  controller: passwordController),
+                  controller: passwordController,
+                  onChanged: checkPasswordStrength),
+              Text(
+                passwordStrength,
+                style: TextStyle(
+                  color: passwordStrength == 'Strong password'
+                      ? Colors.green
+                      : Colors.red,
+                ),
+              ),
               SignupField('Full Name', 'Enter full name...',
                   controller: fullNameController),
               SignupField('School', 'Enter school...',
@@ -117,8 +155,10 @@ class SignupField extends StatelessWidget {
   final String label;
   final String hintText;
   final TextEditingController controller;
+  final ValueChanged<String>? onChanged;
 
-  SignupField(this.label, this.hintText, {required this.controller});
+  SignupField(this.label, this.hintText,
+      {required this.controller, this.onChanged});
 
   @override
   Widget build(BuildContext context) {
@@ -138,6 +178,7 @@ class SignupField extends StatelessWidget {
           color: Colors.white,
           child: TextField(
             controller: controller,
+            onChanged: onChanged,
             decoration: InputDecoration(
               hintText: hintText,
               border: InputBorder.none,

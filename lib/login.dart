@@ -12,6 +12,7 @@ class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  bool _obscurePassword = true; // password visibility
 
   Future<void> _login(BuildContext context) async {
     if (_formKey.currentState!.validate()) {
@@ -115,6 +116,19 @@ class _LoginPageState extends State<LoginPage> {
                       fillColor: Colors.white,
                       filled: true,
                       hintText: 'Enter password...',
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          _obscurePassword
+                              ? Icons.visibility
+                              : Icons.visibility_off,
+                          color: Colors.grey,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            _obscurePassword = !_obscurePassword;
+                          });
+                        },
+                      ),
                     ),
                     validator: (value) {
                       if (value?.isEmpty ?? true) {
@@ -122,7 +136,7 @@ class _LoginPageState extends State<LoginPage> {
                       }
                       return null;
                     },
-                    obscureText: true,
+                    obscureText: _obscurePassword,
                   ),
                 ],
               ),
@@ -140,9 +154,7 @@ class _LoginPageState extends State<LoginPage> {
             ),
             SizedBox(height: 20),
             TextButton(
-              onPressed: () {
-                // TODO: Implement forgot password logic
-              },
+              onPressed: () {},
               child: Text('FORGOT PASSWORD?'),
               style: TextButton.styleFrom(
                 primary: Colors.white,
