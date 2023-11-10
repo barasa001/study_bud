@@ -20,7 +20,7 @@ We believe that Study Bud can help students succeed in school and beyond. By pro
 
 **Link to prototype**: https://previewer.adalo.com/cdd69807-42a6-45da-8b4e-501dee6c0a09
 
-**Link to assignment 4 video**: https://www.youtube.com/watch?v=o3KT_weON3Q
+**Link to assignment 4 video**: [https://www.youtube.com/watch?v=o3KT_weON3Q](https://youtu.be/rf5kjJPvLhY)
 
 ## Authors :black_nib:
 * **Seth Barasa**
