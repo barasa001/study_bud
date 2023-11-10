@@ -22,6 +22,16 @@ We believe that Study Bud can help students succeed in school and beyond. By pro
 
 **Link to assignment 4 video**: [https://www.youtube.com/watch?v=o3KT_weON3Q](https://youtu.be/rf5kjJPvLhY)
 
+**Additional Information**
+
+*Group Contributions*
+
+* Most, if not all, of the code was sent from Seth's VSCode. This was done to minimise on errors. However, each member participated during the live coding sessions.
+
+* The same also applies to the assignment 4 video. Since we were working on Seth's VScode, most of the explanation of the code was done by Seth instead of all members explaining different CRUD functionalities. The other members also had errors whenever they tried setting up the code from their ends because they were yet to configure their devices.
+
+* Each member played an equal role in this project and the git contribution percentage are not the actual representation of member contributions because of the reasons mentioned above.
+
 ## Authors :black_nib:
 * **Seth Barasa**
 * **Kenzo Niragire**
