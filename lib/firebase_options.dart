@@ -66,6 +66,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '527856994660',
     projectId: 'studybudtest',
     storageBucket: 'studybudtest.appspot.com',
+    iosClientId: '527856994660-385p6v0qjpd270c916nib115prcnaec6.apps.googleusercontent.com',
     iosBundleId: 'com.example.studyBud',
   );
 
@@ -75,6 +76,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '527856994660',
     projectId: 'studybudtest',
     storageBucket: 'studybudtest.appspot.com',
+    iosClientId: '527856994660-vl51f1hppelpfueog7j9b3k38orjn09q.apps.googleusercontent.com',
     iosBundleId: 'com.example.studyBud.RunnerTests',
   );
 }
