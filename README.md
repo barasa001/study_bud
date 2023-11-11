@@ -30,7 +30,7 @@ We believe that Study Bud can help students succeed in school and beyond. By pro
 
 * The same also applies to the assignment 4 video. Since we were working on Seth's VScode, most of the explanation of the code was done by Seth instead of all members explaining different CRUD functionalities. The other members also had errors whenever they tried setting up the code from their ends because they were yet to configure their devices.
 
-* Each member played an equal role in this project and the git contribution percentage are not the actual representation of member contributions because of the reasons mentioned above.
+* Each member played an equal role in this project and the git contribution percentages are not the actual representation of member contributions because of the reasons mentioned above.
 
 ## Authors :black_nib:
 * **Seth Barasa**
