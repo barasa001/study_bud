@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'auth_service.dart'; // Import authentication service
-import 'homepagechat.dart'; // Import homepage chat page
-import 'signup.dart'; // Import signup page
+import 'auth_service.dart';
+import 'homepagechat.dart';
+import 'signup.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
@@ -84,9 +84,45 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-  // Placeholder function for handling Apple authentication
   void _loginWithApple() {
     // Add Apple authentication logic here
+  }
+
+  Future<void> _resetPassword(BuildContext context) async {
+    try {
+      _showResetPasswordAlert();
+
+      await FirebaseAuth.instance.sendPasswordResetEmail(
+        email: _emailController.text,
+      );
+
+      Future.delayed(Duration(seconds: 3), () {
+        Navigator.of(context).pop();
+      });
+    } catch (e) {
+      print("Error: $e");
+    }
+  }
+
+  void _showResetPasswordAlert() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Reset Password'),
+          content: Text(
+              'Enter your email in the email field before clicking on forgot password. A password reset link will be sent to your email.'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -189,7 +225,7 @@ class _LoginPageState extends State<LoginPage> {
                 onPrimary: Colors.white,
               ),
             ),
-            SizedBox(height: 10), // Small space
+            SizedBox(height: 10),
             Text(
               'or',
               style: TextStyle(
@@ -197,7 +233,7 @@ class _LoginPageState extends State<LoginPage> {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            SizedBox(height: 10), // Small space
+            SizedBox(height: 10),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -222,7 +258,9 @@ class _LoginPageState extends State<LoginPage> {
             ),
             SizedBox(height: 20),
             TextButton(
-              onPressed: () {},
+              onPressed: () {
+                _resetPassword(context);
+              },
               child: Text('FORGOT PASSWORD?'),
               style: TextButton.styleFrom(
                 primary: Colors.white,
@@ -231,7 +269,6 @@ class _LoginPageState extends State<LoginPage> {
             SizedBox(height: 20),
             TextButton(
               onPressed: () {
-                // Navigate to the signup page
                 Navigator.push(
                   context,
                   MaterialPageRoute(
