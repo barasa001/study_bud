@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
-import 'admin.dart';
+import 'login.dart'; // Import the login page
 
 void main() {
   runApp(SignupApp());
@@ -66,20 +66,8 @@ class _SignupPageState extends State<SignupPage> {
       User? user = userCredential.user;
 
       if (user != null) {
-        CollectionReference collRef =
-            FirebaseFirestore.instance.collection('users');
-        collRef.add({
-          'Email': emailController.text,
-          'FullName': fullNameController.text,
-          'School': schoolController.text,
-          'Specialization': specializationController.text,
-          'Level': levelController.text,
-        }).then((value) {
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => AdminPage()));
-        }).catchError((error) {
-          print("Error: $error");
-        });
+        // Successfully signed up, navigate to the login page
+        Navigator.pushReplacementNamed(context, '/login');
       }
     } catch (e) {
       print("Error: $e");
