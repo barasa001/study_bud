@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'auth_service.dart'; // Import authentication service
 import 'homepagechat.dart'; // Import homepage chat page
 import 'signup.dart'; // Import signup page
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -50,6 +52,40 @@ class _LoginPageState extends State<LoginPage> {
         print('Error: $e');
       }
     }
+  }
+
+  Future<void> _loginWithGoogle() async {
+    try {
+      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+      if (googleUser == null) {
+        // Google Sign In canceled
+        return;
+      }
+
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
+      final AuthCredential credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+
+      final UserCredential userCredential =
+          await FirebaseAuth.instance.signInWithCredential(credential);
+
+      final User? user = userCredential.user;
+
+      if (user != null) {
+        Navigator.pushReplacementNamed(context, '/home');
+      }
+    } catch (e) {
+      print('Error signing in with Google: $e');
+    }
+  }
+
+  // Placeholder function for handling Apple authentication
+  void _loginWithApple() {
+    // Add Apple authentication logic here
   }
 
   @override
@@ -151,6 +187,37 @@ class _LoginPageState extends State<LoginPage> {
                 primary: Colors.green,
                 onPrimary: Colors.white,
               ),
+            ),
+            SizedBox(height: 10), // Small space
+            Text(
+              'or',
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            SizedBox(height: 10), // Small space
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                InkWell(
+                  onTap: _loginWithGoogle,
+                  child: Image.asset(
+                    'images/google-logo.png',
+                    height: 30,
+                    width: 30,
+                  ),
+                ),
+                SizedBox(width: 10),
+                InkWell(
+                  onTap: _loginWithApple,
+                  child: Image.asset(
+                    'images/apple-icon.png',
+                    height: 30,
+                    width: 30,
+                  ),
+                ),
+              ],
             ),
             SizedBox(height: 20),
             TextButton(

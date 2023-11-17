@@ -21,14 +21,21 @@ class StudyBudPage extends StatelessWidget {
               ),
               textAlign: TextAlign.center,
             ),
+            // Image
+            Image.asset(
+              'images/study.jpeg', // Replace with the actual name of your image file
+              height: 150, // Adjust the height as needed
+              width: 150, // Adjust the width as needed
+            ),
             // Button
             ElevatedButton(
               onPressed: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) =>
-                          SignupPage()), // Navigate to SignupPage
+                    builder: (context) =>
+                        SignupPage(), // Navigate to SignupPage
+                  ),
                 );
               },
               child: Text('SIGNUP'),
@@ -43,8 +50,8 @@ class StudyBudPage extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) =>
-                          LoginPage()), // Navigate to LoginPage
+                    builder: (context) => LoginPage(), // Navigate to LoginPage
+                  ),
                 );
               },
               child: Text(
