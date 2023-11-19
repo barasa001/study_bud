@@ -66,6 +66,20 @@ class _SignupPageState extends State<SignupPage> {
       User? user = userCredential.user;
 
       if (user != null) {
+        // Store user information in Firestore
+        await FirebaseFirestore.instance.collection('users').doc(user.uid).set({
+          'email': emailController.text,
+          'fullName': fullNameController.text,
+          'school': schoolController.text,
+          'specialization': specializationController.text,
+          'level': levelController.text,
+        });
+
+        // Initialize user's inbox in Firestore
+        await FirebaseFirestore.instance.collection('inbox').doc(user.uid).set({
+          'messages': [], // Initialize with an empty array
+        });
+
         // Successfully signed up, navigate to the login page
         Navigator.pushReplacementNamed(context, '/login');
       }
