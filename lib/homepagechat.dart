@@ -21,29 +21,48 @@ class _HomePageChatState extends State<HomePageChat> {
   }
 
   Future<void> _loadUsers() async {
-    QuerySnapshot<Map<String, dynamic>> usersSnapshot = await FirebaseFirestore
-        .instance
-        .collection('users')
-        .where('uid', isNotEqualTo: FirebaseAuth.instance.currentUser!.uid)
-        .get();
+    try {
+      QuerySnapshot<Map<String, dynamic>> usersSnapshot =
+          await FirebaseFirestore
+              .instance
+              .collection('users')
+              .where('uid',
+                  isNotEqualTo: FirebaseAuth.instance.currentUser!.uid)
+              .get();
 
-    setState(() {
-      _users = usersSnapshot.docs
-          .map((doc) => "${doc['fullName']} - ${doc['specialization']}")
-          .toList();
-    });
+      setState(() {
+        _users = usersSnapshot.docs
+            .map((doc) => "${doc['fullName']} - ${doc['specialization']}")
+            .toList();
+      });
+    } catch (e) {
+      print("Error loading users: $e"); // Check for errors during user loading
+    }
   }
 
   Future<void> _loadCurrentUser() async {
-    DocumentSnapshot<Map<String, dynamic>> currentUserSnapshot =
-        await FirebaseFirestore.instance
-            .collection('users')
-            .doc(FirebaseAuth.instance.currentUser!.uid)
-            .get();
+    try {
+      print('Current user UID: ${FirebaseAuth.instance.currentUser!.uid}');
+      DocumentSnapshot<Map<String, dynamic>> currentUserSnapshot =
+          await FirebaseFirestore.instance
+              .collection('users')
+              .doc(FirebaseAuth.instance.currentUser!.uid)
+              .get();
+      print('currentUserSnapshot.data(): ${currentUserSnapshot.data()}');
 
-    setState(() {
-      _currentUserData = currentUserSnapshot.data();
-    });
+      setState(() {
+        _currentUserData = currentUserSnapshot.data();
+      });
+
+      if (_currentUserData != null) {
+        print('Current user data loaded successfully'); // Add success message
+      } else {
+        print('Current user data is null'); // Check if user data is null
+      }
+    } catch (e) {
+      print(
+          "Error loading current user: $e"); // Check for errors during user loading
+    }
   }
 
   @override
