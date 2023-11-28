@@ -55,7 +55,6 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Future<void> _loginWithGoogle() async {
-    print("Google button tapped");
     try {
       final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
 
