@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'auth_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'chat.dart'; // Import the chat page
 
 class HomePageChat extends StatefulWidget {
   @override
@@ -36,7 +37,7 @@ class _HomePageChatState extends State<HomePageChat> {
             .toList();
       });
     } catch (e) {
-      print("Error loading users: $e"); // Check for errors during user loading
+      print("Error loading users: $e");
     }
   }
 
@@ -55,13 +56,12 @@ class _HomePageChatState extends State<HomePageChat> {
       });
 
       if (_currentUserData != null) {
-        print('Current user data loaded successfully'); // Add success message
+        print('Current user data loaded successfully');
       } else {
-        print('Current user data is null'); // Check if user data is null
+        print('Current user data is null');
       }
     } catch (e) {
-      print(
-          "Error loading current user: $e"); // Check for errors during user loading
+      print("Error loading current user: $e");
     }
   }
 
@@ -144,7 +144,7 @@ class _HomePageChatState extends State<HomePageChat> {
               },
             ),
           ),
-          _buildChatInput(),
+          _buildChatButton(),
         ],
       ),
     );
@@ -161,7 +161,6 @@ class _HomePageChatState extends State<HomePageChat> {
             padding: const EdgeInsets.all(8.0),
             child: ElevatedButton(
               onPressed: () {
-                // Implement logic to send a message to the selected user
                 print('Sending message to ${_users[index]}');
               },
               child: Text(_users[index]),
@@ -172,26 +171,17 @@ class _HomePageChatState extends State<HomePageChat> {
     );
   }
 
-  Widget _buildChatInput() {
+  Widget _buildChatButton() {
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: Row(
-        children: [
-          Expanded(
-            child: TextField(
-              controller: _messageController,
-              decoration: InputDecoration(
-                hintText: 'Type a message...',
-              ),
-            ),
-          ),
-          IconButton(
-            icon: Icon(Icons.send),
-            onPressed: () {
-              _sendMessage();
-            },
-          ),
-        ],
+      child: ElevatedButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => ChatPage()),
+          );
+        },
+        child: Text('Go to Chat'),
       ),
     );
   }

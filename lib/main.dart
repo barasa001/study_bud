@@ -5,6 +5,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'firebase_options.dart';
 import 'login.dart';
 import 'homepagechat.dart';
+import 'chat.dart'; // Updated import for the chat page
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,6 +24,7 @@ class MyApp extends StatelessWidget {
         '/': (context) => StudyBudPage(),
         '/login': (context) => LoginPage(),
         '/home': (context) => HomePageChat(),
+        '/chat': (context) => ChatPage(), // Added route to ChatPage
       },
     );
   }
